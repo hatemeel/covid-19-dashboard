@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View } from 'react-native';
 import RobotoText from '../components/RobotoText';
 import Context from '../context/Context';

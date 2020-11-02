@@ -2,7 +2,7 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import CurrentCountryStack from './currentCountryStack';
-import GlobalStack from './globalStack';
+import GlobalCountriesStack from './globalCountriesStack';
 import Sidebar from '../components/Sidebar';
 
 const Drawer = createDrawerNavigator();
@@ -12,13 +12,17 @@ export default function Navigator() {
     <NavigationContainer>
       <Drawer.Navigator
         initialRouteName="CurrentCountryStack"
-        drawerContent={() => <Sidebar />}
+        drawerContent={(props) => <Sidebar {...props} />}
+        hideStatusBar={true}
       >
         <Drawer.Screen
           name="CurrentCountryStack"
           component={CurrentCountryStack}
         />
-        <Drawer.Screen name="GlobalStack" component={GlobalStack} />
+        <Drawer.Screen
+          name="GlobalCountriesStack"
+          component={GlobalCountriesStack}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );

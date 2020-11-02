@@ -13,9 +13,9 @@ export default function Card({ children, style }) {
 const styles = StyleSheet.create({
   card: {
     position: 'relative',
-    ...globalStyles.shadowSm,
+    ...globalStyles.shadow,
     backgroundColor: '#fff',
-    borderRadius: 4,
+    borderRadius: 8,
   },
   card__body: {
     padding: 20,
