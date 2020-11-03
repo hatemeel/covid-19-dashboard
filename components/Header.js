@@ -8,11 +8,11 @@ import { Colors } from '../styles/colors';
 import { globalStyles } from '../styles/global';
 import Burger from './Burger';
 
-export default function Header({ navigation }) {
+export default function Header({ navigation, back }) {
   StatusBar.setBarStyle('dark-content');
 
   const {
-    state: { headerOptions, globalData },
+    state: { globalData },
   } = useContext(Context);
 
   const openMenu = () => {
@@ -20,13 +20,15 @@ export default function Header({ navigation }) {
   };
 
   const goBack = () => {
-    navigation.navigate(headerOptions.back);
+    navigation.navigate(back.stack, {
+      screen: back.screen,
+    });
   };
 
   return (
     <View>
       <View style={styles.header}>
-        {headerOptions.back ? (
+        {back ? (
           <MaterialIcons
             style={styles.header__burger}
             name="keyboard-arrow-left"
@@ -38,9 +40,7 @@ export default function Header({ navigation }) {
           </View>
         )}
 
-        <RobotoText style={styles.header__title}>
-          {headerOptions.title || 'Covid-19 Dashboard'}
-        </RobotoText>
+        <RobotoText style={styles.header__title}>Covid-19 Dashboard</RobotoText>
       </View>
 
       <View style={styles.subheader}>
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 15,
     paddingTop: 20,
+    fontSize: 30,
   },
   header__logo: {
     width: 25,

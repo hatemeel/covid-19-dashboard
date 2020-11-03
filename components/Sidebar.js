@@ -38,28 +38,26 @@ export default function Sidebar({ navigation }) {
   return (
     <View style={styles.sidebar}>
       <View style={styles.sidebar__country}>
-        {loaded && (
-          <Card>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={styles.sidebar__countryFlag}>
-                <SvgUri
-                  width="100%"
-                  height="100%"
-                  uri={`https://purecatamphetamine.github.io/country-flag-icons/1x1/${currentCountryData.countryCode}.svg`}
-                />
-              </View>
-
-              <View style={styles.sidebar__countryData}>
-                <RobotoText style={{ marginBottom: 6 }}>
-                  {currentCountryData.region} / {currentCountryData.country}
-                </RobotoText>
-                <RobotoText>
-                  {splitNumber(currentCountryData.confirmed?.total)}
-                </RobotoText>
-              </View>
+        <Card>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={styles.sidebar__countryFlag}>
+              <SvgUri
+                width="100%"
+                height="100%"
+                uri={`https://purecatamphetamine.github.io/country-flag-icons/1x1/${currentCountryData.countryCode}.svg`}
+              />
             </View>
-          </Card>
-        )}
+
+            <View style={styles.sidebar__countryData}>
+              <RobotoText style={{ marginBottom: 6 }}>
+                {currentCountryData.region} / {currentCountryData.country}
+              </RobotoText>
+              <RobotoText>
+                {splitNumber(currentCountryData.confirmed?.total)}
+              </RobotoText>
+            </View>
+          </View>
+        </Card>
       </View>
 
       <View style={{ flex: 1 }}>

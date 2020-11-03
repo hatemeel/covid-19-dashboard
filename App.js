@@ -14,11 +14,9 @@ export default function App() {
   const [state, setState] = useState({
     loading: false,
     loaded: false,
-    headerOptions: {},
     globalData: {},
     currentCountryData: {},
     countries: [],
-    selectedCountryData: {},
   });
 
   useEffect(() => {
@@ -40,7 +38,7 @@ export default function App() {
 
   return (
     <Context.Provider value={{ state, updateData }}>
-      {fontsLoaded ? <Navigator /> : null}
+      {fontsLoaded && state.loaded ? <Navigator /> : null}
       <LoadingIndecator show={fontsLoaded && state.loading} />
     </Context.Provider>
   );

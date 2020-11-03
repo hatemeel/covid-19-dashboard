@@ -10,7 +10,7 @@ import Context from '../context/Context';
 import { globalStyles, margin } from '../styles/global';
 import { debounce, splitNumber } from '../utils/utils';
 
-export default function GlobalCountriesScreen() {
+export default function GlobalCountriesScreen({ navigation }) {
   const {
     state: { countries },
   } = useContext(Context);
@@ -27,11 +27,20 @@ export default function GlobalCountriesScreen() {
       .sort((a, b) => b.confirmed.total - a.confirmed.total);
   };
 
+  const selectCountry = ({ countryCode }) => {
+    navigation.navigate('GlobalCountriesStack', {
+      screen: 'SelectedCountryScreen',
+      params: {
+        countryCode,
+      },
+    });
+  };
+
   return (
     <ScrollView>
       <View style={globalStyles.container}>
         <View style={styles.searchBar}>
-          <SearchInput onChangeText={debounce(setSearch, 300)} />
+          <SearchInput onChangeText={debounce(setSearch, 500)} />
 
           <TouchableOpacity style={margin('left', 15)}>
             <Icon
@@ -45,6 +54,7 @@ export default function GlobalCountriesScreen() {
           <TouchableOpacity
             key={Math.random().toString()}
             style={countryIndex ? margin('top', 30) : {}}
+            onPress={() => selectCountry(country)}
           >
             <Card>
               <View style={{ flexDirection: 'row' }}>

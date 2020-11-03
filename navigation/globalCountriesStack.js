@@ -22,6 +22,17 @@ export default function GlobalCountriesStack({ navigation }) {
       />
       <Stack.Screen
         name="SelectedCountryScreen"
+        options={{
+          header: () => (
+            <Header
+              navigation={navigation}
+              back={{
+                stack: 'GlobalCountriesStack',
+                screen: 'GlobalCountriesScreen',
+              }}
+            />
+          ),
+        }}
         component={SelectedCountryScreen}
       />
     </Stack.Navigator>

@@ -7,36 +7,10 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import Card from '../components/Card';
+import Card from './Card';
 import { globalStyles } from '../styles/global';
-import { MaterialIcons } from '@expo/vector-icons';
-import * as yup from 'yup';
 
-const ReviewValidationSchema = yup.object({
-  title: yup.string().required().min(4),
-  description: yup.string().required().min(8),
-  rating: yup
-    .string()
-    .required()
-    .test(
-      'is-num-1-5',
-      'Rating must be a number 1 - 5',
-      (val) => parseInt(val) > 0 && parseInt(val) < 6
-    ),
-});
-
-export default function AddReviewModal({
-  modalOpen,
-  onCloseModal,
-  onAddReview,
-}) {
-  const onSubmit = (values) => {
-    if (values.title) {
-      onAddReview({ ...values, rating: parseInt(values.rating, 10) });
-      onCloseModal();
-    }
-  };
-
+export default function SortModal({ modalOpen, onCloseModal }) {
   return (
     <Modal visible={modalOpen} transparent={true} animationType="slide">
       <TouchableWithoutFeedback onPress={onCloseModal}>
@@ -47,9 +21,9 @@ export default function AddReviewModal({
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.modal__title}>New Review</Text>
 
-          <MaterialIcons
+          <Icon
             style={styles.modal__close}
-            name="close"
+            name="close-line"
             onPress={onCloseModal}
           />
         </View>
