@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Circle, G, TSpan } from 'react-native-svg';
-import { PieChart } from 'react-native-svg-charts';
+import { PieChart, ProgressCircle } from 'react-native-svg-charts';
 import { Colors } from '../styles/colors';
 import { globalStyles, margin } from '../styles/global';
 import { capitalize, splitNumber } from '../utils/utils';
@@ -10,22 +10,24 @@ import Icon from './Icon';
 import RobotoText from './RobotoText';
 
 export default function CountryStatistics({ countryData, dataType }) {
-  const data = [3511, 177];
-  const dataSum = data.reduce((acc, val) => acc + val, 0);
-
-  const randomColor = () =>
-    `#${((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0')}`;
+  const sum = (...args) => args.reduce((acc, val) => acc + val, 0);
 
   const pieData = [
     {
-      value: (100 / dataSum) * data[0],
+      value:
+        (100 /
+          sum(countryData.recovered[dataType], countryData.deaths[dataType])) *
+        countryData.recovered[dataType],
       svg: {
         fill: Colors.success,
       },
       key: `pie-${0}`,
     },
     {
-      value: (100 / dataSum) * data[1],
+      value:
+        (100 /
+          sum(countryData.recovered[dataType], countryData.deaths[dataType])) *
+        countryData.deaths[dataType],
       svg: {
         fill: Colors.dark,
       },
@@ -119,18 +121,53 @@ export default function CountryStatistics({ countryData, dataType }) {
 
         <View style={[margin('top', 20), { flexDirection: 'row' }]}>
           <View style={{ flex: 1, marginRight: 15 }}>
-            <PieChart style={{ height: 200 }} data={pieData} innerRadius="35%">
-              <Labels />
-            </PieChart>
+            <View>
+              <ProgressCircle
+                style={{ height: 200 }}
+                progress={
+                  Math.ceil(
+                    (countryData.confirmed[dataType] * 100) /
+                      countryData.population
+                  ) / 100
+                }
+                progressColor={Colors.danger}
+                strokeWidth={10}
+                cornerRadius={0}
+              />
+
+              <View
+                style={{
+                  position: 'absolute',
+                  width: '100%',
+                  height: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <RobotoText>
+                  {(
+                    (countryData.confirmed[dataType] * 100) /
+                    countryData.population
+                  ).toFixed(2)}
+                  %
+                </RobotoText>
+              </View>
+            </View>
 
             <RobotoText style={[globalStyles.text_1, { textAlign: 'center' }]}>
               Population / Confirmed
             </RobotoText>
           </View>
           <View style={{ flex: 1 }}>
-            <PieChart style={{ height: 200 }} data={pieData} innerRadius="35%">
-              <Labels />
-            </PieChart>
+            <View>
+              <PieChart
+                style={{ height: 200 }}
+                data={pieData}
+                innerRadius="35%"
+              >
+                <Labels />
+              </PieChart>
+            </View>
 
             <RobotoText style={[globalStyles.text_1, { textAlign: 'center' }]}>
               Recovered / Deaths

@@ -38,6 +38,13 @@ export default function CountryHead({ countryData, isCurrentCountry }) {
               </RobotoText>
             </View>
 
+            <View style={margin('bottom', 10)}>
+              <RobotoText style={globalStyles.text_1}>Population</RobotoText>
+              <RobotoText style={globalStyles.text_3}>
+                {splitNumber(countryData.population)}
+              </RobotoText>
+            </View>
+
             <View>
               <RobotoText style={globalStyles.text_1}>
                 Total confirmed
