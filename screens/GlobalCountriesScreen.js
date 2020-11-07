@@ -68,10 +68,7 @@ export default function GlobalCountriesScreen({ navigation }) {
   };
 
   const applySort = (sortSettings) => {
-    console.log(sortSettings);
-    setLoaded(false);
     setSort(sortSettings);
-    setLoaded(true);
   };
 
   return (
