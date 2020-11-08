@@ -8,7 +8,7 @@ export default function LoadingIndecator({ show }) {
   return (
     <Modal visible={!!show} animationType="fade">
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+        <ActivityIndicator size="large" color={Colors.loaderColor} />
 
         <RobotoText style={margin('top', 20)}>Loading...</RobotoText>
       </View>

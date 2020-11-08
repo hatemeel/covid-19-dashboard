@@ -10,4 +10,5 @@ export const Colors = {
   white: '#ffffff',
   menuItemActive: '#E9ECEF',
   borderColor: '#CED4DA',
+  loaderColor: '#007bff',
 };

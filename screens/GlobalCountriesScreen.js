@@ -18,7 +18,7 @@ export default function GlobalCountriesScreen({ navigation }) {
   } = useContext(Context);
   const [countriesToShow, setCountriesToShow] = useState([]);
   const [search, setSearch] = useState('');
-  const [modalOpen, setModalOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [sort, setSort] = useState({
     type: 'confirmed',
@@ -115,7 +115,7 @@ export default function GlobalCountriesScreen({ navigation }) {
               marginTop: 20,
             }}
           >
-            <ActivityIndicator size="large" color={Colors.primary} />
+            <ActivityIndicator size="large" color={Colors.loaderColor} />
 
             <RobotoText style={margin('top', 20)}>Loading...</RobotoText>
           </View>
