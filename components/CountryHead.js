@@ -12,11 +12,7 @@ export default function CountryHead({ countryData, isCurrentCountry }) {
       <Card>
         <View style={{ flexDirection: 'row' }}>
           <View style={styles.country__flag}>
-            <SvgUri
-              width="100%"
-              height="100%"
-              uri={`https://purecatamphetamine.github.io/country-flag-icons/1x1/${countryData.countryCode}.svg`}
-            />
+            <SvgUri width="100%" height="100%" uri={countryData.flagUrl} />
           </View>
 
           <View style={styles.country__data}>

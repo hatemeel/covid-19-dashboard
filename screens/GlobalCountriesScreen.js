@@ -135,7 +135,7 @@ export default function GlobalCountriesScreen({ navigation }) {
                       <SvgUri
                         width="100%"
                         height="100%"
-                        uri={`https://purecatamphetamine.github.io/country-flag-icons/1x1/${country.countryCode}.svg`}
+                        uri={country.flagUrl}
                       />
                     </View>
 

@@ -8,7 +8,9 @@ export const getCovidData = () => {
 
 export const getCountriesData = ({ country = '' } = {}) => {
   return fetch(
-    `https://restcountries.eu/rest/v2/${country ? `name/${country}` : 'all'}`
+    `https://restcountries.eu/rest/v2/${
+      country ? `name/${country}` : 'all?fields=alpha2Code;region;population'
+    }`
   ).then((r) => r.json());
 };
 
@@ -44,7 +46,7 @@ function mergeData({ covidData: { Countries }, countriesData }) {
         countryCode: countryCovidData.CountryCode,
         region: countryData.region,
         population: countryData.population,
-        flagUrl: countryData.flag,
+        flagUrl: `https://purecatamphetamine.github.io/country-flag-icons/1x1/${countryCovidData.CountryCode}.svg`,
         confirmed: {
           new: countryCovidData.NewConfirmed,
           total: countryCovidData.TotalConfirmed,
