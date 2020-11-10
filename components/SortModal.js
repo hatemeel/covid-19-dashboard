@@ -5,7 +5,8 @@ import {
   Modal,
   StyleSheet,
   Dimensions,
-  TouchableOpacity,
+  ActivityIndicator,
+  TouchableHighlight,
 } from 'react-native';
 import Card from './Card';
 import { globalStyles, margin } from '../styles/global';
@@ -18,6 +19,7 @@ import { applySortSettings, closeSortModal } from '../redux/actions';
 
 function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
   const [sort, setSort] = useState({ ...sortSettings });
+  const [processing, setProcessing] = useState(false);
 
   const changeSort = (prop, value) => {
     setSort((prevState) => ({
@@ -29,6 +31,7 @@ function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
   const apply = () => {
     closeModal();
     applySortSettings(sort);
+    setProcessing(false);
   };
 
   return (
@@ -122,11 +125,18 @@ function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
             </View>
           </View>
 
-          <TouchableOpacity onPress={apply}>
-            <View style={styles.applyButton}>
+          <TouchableHighlight
+            style={styles.applyButton}
+            underlayColor={Colors.light}
+            onPressIn={() => setProcessing(true)}
+            onPressOut={apply}
+          >
+            {!processing ? (
               <RobotoText style={globalStyles.text_4}>Apply</RobotoText>
-            </View>
-          </TouchableOpacity>
+            ) : (
+              <ActivityIndicator color={Colors.dark} />
+            )}
+          </TouchableHighlight>
         </Card>
       </View>
     </Modal>
