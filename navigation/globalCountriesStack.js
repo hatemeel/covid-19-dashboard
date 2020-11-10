@@ -27,7 +27,6 @@ export default function GlobalCountriesStack({ navigation }) {
             <Header
               navigation={navigation}
               back={{
-                stack: 'GlobalCountriesStack',
                 screen: 'GlobalCountriesScreen',
               }}
             />

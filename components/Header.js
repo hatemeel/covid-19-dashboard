@@ -1,28 +1,22 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { StyleSheet, StatusBar, View } from 'react-native';
-import Context from '../context/Context';
 import RobotoText from './RobotoText';
 import { splitNumber } from '../utils/utils';
 import { Colors } from '../styles/colors';
 import { globalStyles } from '../styles/global';
 import Burger from './Burger';
+import { connect } from 'react-redux';
 
-export default function Header({ navigation, back }) {
+function Header({ navigation, back, globalData }) {
   StatusBar.setBarStyle('dark-content');
-
-  const {
-    state: { globalData },
-  } = useContext(Context);
 
   const openMenu = () => {
     navigation.openDrawer();
   };
 
   const goBack = () => {
-    navigation.navigate(back.stack, {
-      screen: back.screen,
-    });
+    navigation.navigate(back.screen);
   };
 
   return (
@@ -45,12 +39,20 @@ export default function Header({ navigation, back }) {
 
       <View style={styles.subheader}>
         <RobotoText style={[globalStyles.textLight]}>
-          Global confirmed: {splitNumber(globalData.TotalConfirmed)}
+          Global confirmed: {splitNumber(globalData.totalConfirmed)}
         </RobotoText>
       </View>
     </View>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    globalData: state.covidData.globalData,
+  };
+};
+
+export default connect(mapStateToProps)(Header);
 
 const styles = StyleSheet.create({
   header: {

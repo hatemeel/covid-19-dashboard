@@ -1,111 +1,31 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { SvgUri } from 'react-native-svg';
-import Card from '../components/Card';
-import Icon from '../components/Icon';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, View, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
+import CountryCard from '../components/CountryCard';
 import RobotoText from '../components/RobotoText';
-import SearchInput from '../components/SearchInput';
+import SearchBar from '../components/SearchBar';
+import SortIndecators from '../components/SortIndecators';
 import SortModal from '../components/SortModal';
-import Context from '../context/Context';
+import { openSortModal, selectCountry } from '../redux/actions';
 import { Colors } from '../styles/colors';
 import { globalStyles, margin } from '../styles/global';
-import { capitalize, debounce, splitNumber } from '../utils/utils';
 
-export default function GlobalCountriesScreen({ navigation }) {
-  const {
-    state: { countries },
-  } = useContext(Context);
-  const [countriesToShow, setCountriesToShow] = useState([]);
-  const [search, setSearch] = useState('');
-  const [modalOpen, setModalOpen] = useState(false);
+function GlobalCountriesScreen({ navigation, countries, setSelectedCountry }) {
   const [loaded, setLoaded] = useState(false);
-  const [sort, setSort] = useState({
-    type: 'confirmed',
-    interval: 'total',
-    desc: true,
-  });
 
   useEffect(() => {
-    setLoaded(false);
-    setCountriesToShow(countries);
     setLoaded(true);
   }, []);
 
-  const formatedCountries = () => {
-    return countriesToShow
-      .filter(
-        ({ country, countryCode, region }) =>
-          country.toLowerCase().startsWith(search.toLowerCase()) ||
-          countryCode.toLowerCase().startsWith(search.toLowerCase()) ||
-          region.toLowerCase().startsWith(search.toLowerCase())
-      )
-      .sort((a, b) => {
-        switch (sort.desc) {
-          case true:
-            return b[sort.type][sort.interval] - a[sort.type][sort.interval];
-          case false:
-            return a[sort.type][sort.interval] - b[sort.type][sort.interval];
-        }
-      });
-  };
-
   const selectCountry = ({ countryCode }) => {
-    navigation.navigate('GlobalCountriesStack', {
-      screen: 'SelectedCountryScreen',
-      params: {
-        countryCode,
-      },
-    });
-  };
+    setSelectedCountry(countryCode);
 
-  const openModal = () => {
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-  };
-
-  const applySort = (sortSettings) => {
-    setSort(sortSettings);
+    navigation.navigate('SelectedCountryScreen');
   };
 
   return (
     <ScrollView>
       <View style={globalStyles.container}>
-        <View style={styles.searchBar}>
-          <SearchInput onChangeText={debounce(setSearch, 500)} />
-
-          <TouchableOpacity style={margin('left', 15)} onPress={openModal}>
-            <Icon
-              name="arrow-up-down-line"
-              style={[globalStyles.icon, styles.searchBar__icon]}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.sortSettings}>
-          <RobotoText style={[margin('right', 10), globalStyles.text_1]}>
-            Sorted by:
-          </RobotoText>
-          <RobotoText style={globalStyles.text_1}>
-            {capitalize(sort.interval)}
-          </RobotoText>
-          <RobotoText style={[margin('horizontal', 10), globalStyles.text_1]}>
-            -
-          </RobotoText>
-          <RobotoText style={globalStyles.text_1}>
-            {capitalize(sort.type)}
-          </RobotoText>
-          <RobotoText style={[margin('horizontal', 10), globalStyles.text_1]}>
-            -
-          </RobotoText>
-          <RobotoText style={globalStyles.text_1}>
-            {sort.desc ? 'Descending' : 'Ascending'}
-          </RobotoText>
-        </View>
-
         {!loaded && (
           <View
             style={{
@@ -122,76 +42,42 @@ export default function GlobalCountriesScreen({ navigation }) {
         )}
 
         {loaded && (
-          <View>
-            {formatedCountries().map((country, countryIndex) => (
-              <TouchableOpacity
-                key={Math.random().toString()}
-                style={countryIndex ? margin('top', 30) : {}}
-                onPress={() => selectCountry(country)}
-              >
-                <Card>
-                  <View style={{ flexDirection: 'row' }}>
-                    <View style={styles.countryFlag}>
-                      <SvgUri
-                        width="100%"
-                        height="100%"
-                        uri={country.flagUrl}
-                      />
-                    </View>
+          <>
+            <SearchBar />
 
-                    <View style={styles.countryData}>
-                      <RobotoText
-                        style={[globalStyles.text_3, globalStyles.textDanger]}
-                      >
-                        {splitNumber(country.confirmed.total)}
-                      </RobotoText>
+            <SortIndecators />
 
-                      <RobotoText style={globalStyles.text_5}>
-                        {country.country}
-                      </RobotoText>
-                    </View>
-                  </View>
-                </Card>
-              </TouchableOpacity>
-            ))}
-          </View>
+            <View>
+              {countries.map((country, countryIndex) => (
+                <CountryCard
+                  key={Math.random().toString()}
+                  country={country}
+                  countryIndex={countryIndex}
+                  onSelectCountry={selectCountry}
+                />
+              ))}
+            </View>
+          </>
         )}
       </View>
 
-      <SortModal
-        modalOpen={modalOpen}
-        onCloseModal={closeModal}
-        sort={sort}
-        onApply={applySort}
-      />
+      <SortModal />
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  countryFlag: {
-    width: 60,
-    height: 60,
-    borderRadius: 60,
-    overflow: 'hidden',
-  },
-  countryData: {
-    flex: 1,
-    marginLeft: 15,
-    justifyContent: 'center',
-  },
-  searchBar: {
-    marginBottom: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  searchBar__icon: {
-    fontSize: 30,
-  },
-  sortSettings: {
-    marginBottom: 30,
-    flexDirection: 'row',
-    alignItems: 'center',
-    opacity: 0.75,
-  },
-});
+const mapStateToProps = (state) => {
+  return {
+    countries: state.covidData.formatedCountries,
+  };
+};
+
+const mapDispatchToProps = {
+  openModal: openSortModal,
+  setSelectedCountry: selectCountry,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(GlobalCountriesScreen);

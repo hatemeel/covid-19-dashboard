@@ -12,12 +12,19 @@ import RobotoText from './RobotoText';
 export default function CountryStatistics({ countryData, dataType }) {
   const sum = (...args) => args.reduce((acc, val) => acc + val, 0);
 
+  const getPerc = (value) => {
+    if (value) {
+      return 100 / value;
+    }
+    return 0;
+  };
+
   const pieData = [
     {
       value:
-        (100 /
-          sum(countryData.recovered[dataType], countryData.deaths[dataType])) *
-        countryData.recovered[dataType],
+        getPerc(
+          sum(countryData.recovered[dataType], countryData.deaths[dataType])
+        ) * countryData.recovered[dataType],
       svg: {
         fill: Colors.success,
       },
@@ -25,9 +32,9 @@ export default function CountryStatistics({ countryData, dataType }) {
     },
     {
       value:
-        (100 /
-          sum(countryData.recovered[dataType], countryData.deaths[dataType])) *
-        countryData.deaths[dataType],
+        getPerc(
+          sum(countryData.recovered[dataType], countryData.deaths[dataType])
+        ) * countryData.deaths[dataType],
       svg: {
         fill: Colors.dark,
       },
