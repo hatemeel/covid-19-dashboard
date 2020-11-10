@@ -156,7 +156,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width - 30,
     maxWidth: 500,
     maxHeight: Dimensions.get('screen').height - 30,
-    top: 28,
     alignSelf: 'center',
   },
   section: {
