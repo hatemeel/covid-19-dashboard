@@ -1,10 +1,13 @@
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
+import { connect } from 'react-redux';
+import { setSearchValue } from '../redux/actions';
 import { Colors } from '../styles/colors';
 import { globalStyles } from '../styles/global';
+import { debounce } from '../utils/utils';
 import Icon from './Icon';
 
-export default function SearchInput({ onChangeText }) {
+function SearchInput({ setSearchValue }) {
   return (
     <View style={styles.searchInput}>
       <Icon
@@ -15,11 +18,17 @@ export default function SearchInput({ onChangeText }) {
       <TextInput
         style={styles.searchInput__text}
         placeholder="Country name, code, region"
-        onChangeText={onChangeText}
+        onChangeText={debounce(setSearchValue, 500)}
       />
     </View>
   );
 }
+
+const mapDispatchToProps = {
+  setSearchValue,
+};
+
+export default connect(null, mapDispatchToProps)(SearchInput);
 
 const styles = StyleSheet.create({
   searchInput: {

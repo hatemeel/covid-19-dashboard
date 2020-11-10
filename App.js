@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useFonts } from 'expo-font';
-import Context from './context/Context';
 import Navigator from './navigation/drawerNavigator';
 import LoadingIndecator from './components/LoadingIndecator';
-import { getAllData } from './actions/actions';
+import { Provider } from 'react-redux';
+import { applyMiddleware, compose, createStore } from 'redux';
+import { rootReducer } from './redux/rootReducer';
+import thunk from 'redux-thunk';
+import { fetchCovidData } from './redux/actions';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -11,35 +14,18 @@ export default function App() {
     'roboto-bold': require('./assets/fonts/Roboto-Bold.ttf'),
     remixicon: require('./assets/fonts/remixicon.ttf'),
   });
-  const [state, setState] = useState({
-    loading: false,
-    loaded: false,
-    globalData: {},
-    currentCountryData: {},
-    countries: [],
-  });
 
-  useEffect(() => {
-    updateData();
-  }, []);
+  const store = createStore(rootReducer, compose(applyMiddleware(thunk)));
 
-  const updateData = async () => {
-    setState((prevState) => ({ ...prevState, loading: true }));
-
-    try {
-      const data = await getAllData();
-      setState((prevState) => ({ ...prevState, ...data, loaded: true }));
-    } catch (error) {
-      console.log(error);
-    }
-
-    setState((prevState) => ({ ...prevState, loading: false }));
-  };
+  store.dispatch(fetchCovidData());
 
   return (
-    <Context.Provider value={{ state, updateData }}>
-      {fontsLoaded && state.loaded ? <Navigator /> : null}
-      <LoadingIndecator show={fontsLoaded && state.loading} />
-    </Context.Provider>
+    (fontsLoaded && (
+      <Provider store={store}>
+        <Navigator />
+        <LoadingIndecator />
+      </Provider>
+    )) ||
+    null
   );
 }

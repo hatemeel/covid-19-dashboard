@@ -13,26 +13,28 @@ import Icon from './Icon';
 import RobotoText from './RobotoText';
 import { Colors } from '../styles/colors';
 import Radio from './Radio';
+import { connect } from 'react-redux';
+import { applySortSettings, closeSortModal } from '../redux/actions';
 
-export default function SortModal({ modalOpen, onCloseModal, sort, onApply }) {
-  const [sortSettings, setSortSettings] = useState({ ...sort });
+function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
+  const [sort, setSort] = useState({ ...sortSettings });
 
   const changeSort = (prop, value) => {
-    setSortSettings((prevState) => ({
+    setSort((prevState) => ({
       ...prevState,
       [prop]: value,
     }));
   };
 
   const apply = () => {
-    onCloseModal();
-    onApply(sortSettings);
+    closeModal();
+    applySortSettings(sort);
   };
 
   return (
     <Modal visible={modalOpen} transparent={true} animationType="fade">
       <View style={{ flex: 1, justifyContent: 'center' }}>
-        <TouchableWithoutFeedback onPress={onCloseModal}>
+        <TouchableWithoutFeedback onPress={closeModal}>
           <View style={styles.modal__backdrop} />
         </TouchableWithoutFeedback>
 
@@ -48,7 +50,7 @@ export default function SortModal({ modalOpen, onCloseModal, sort, onApply }) {
             <Icon
               style={styles.modal__close}
               name="close-line"
-              onPress={onCloseModal}
+              onPress={closeModal}
             />
           </View>
 
@@ -56,7 +58,7 @@ export default function SortModal({ modalOpen, onCloseModal, sort, onApply }) {
             <View style={margin('bottom', 15)}>
               <Radio
                 title="Confirmed"
-                checked={sortSettings.type === 'confirmed'}
+                checked={sort.type === 'confirmed'}
                 onCheck={() => changeSort('type', 'confirmed')}
               />
             </View>
@@ -64,7 +66,7 @@ export default function SortModal({ modalOpen, onCloseModal, sort, onApply }) {
             <View style={margin('bottom', 15)}>
               <Radio
                 title="Recovered"
-                checked={sortSettings.type === 'recovered'}
+                checked={sort.type === 'recovered'}
                 onCheck={() => changeSort('type', 'recovered')}
               />
             </View>
@@ -72,7 +74,7 @@ export default function SortModal({ modalOpen, onCloseModal, sort, onApply }) {
             <View style={margin('bottom', 15)}>
               <Radio
                 title="Deaths"
-                checked={sortSettings.type === 'deaths'}
+                checked={sort.type === 'deaths'}
                 onCheck={() => changeSort('type', 'deaths')}
               />
             </View>
@@ -82,7 +84,7 @@ export default function SortModal({ modalOpen, onCloseModal, sort, onApply }) {
             <View style={margin('bottom', 15)}>
               <Radio
                 title="Total"
-                checked={sortSettings.interval === 'total'}
+                checked={sort.interval === 'total'}
                 onCheck={() => changeSort('interval', 'total')}
               />
             </View>
@@ -90,7 +92,7 @@ export default function SortModal({ modalOpen, onCloseModal, sort, onApply }) {
             <View style={margin('bottom', 15)}>
               <Radio
                 title="New"
-                checked={sortSettings.interval === 'new'}
+                checked={sort.interval === 'new'}
                 onCheck={() => changeSort('interval', 'new')}
               />
             </View>
@@ -106,7 +108,7 @@ export default function SortModal({ modalOpen, onCloseModal, sort, onApply }) {
             <View style={margin('bottom', 15)}>
               <Radio
                 title="Descending"
-                checked={sortSettings.desc === true}
+                checked={sort.desc === true}
                 onCheck={() => changeSort('desc', true)}
               />
             </View>
@@ -114,7 +116,7 @@ export default function SortModal({ modalOpen, onCloseModal, sort, onApply }) {
             <View style={margin('bottom', 30)}>
               <Radio
                 title="Ascending"
-                checked={sortSettings.desc === false}
+                checked={sort.desc === false}
                 onCheck={() => changeSort('desc', false)}
               />
             </View>
@@ -130,6 +132,20 @@ export default function SortModal({ modalOpen, onCloseModal, sort, onApply }) {
     </Modal>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    modalOpen: state.app.sortModalOpen,
+    sortSettings: state.covidData.sortSettings,
+  };
+};
+
+const mapDispatchToProps = {
+  closeModal: closeSortModal,
+  applySortSettings,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SortModal);
 
 const styles = StyleSheet.create({
   modal__title: {

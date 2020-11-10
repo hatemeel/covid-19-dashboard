@@ -1,18 +1,15 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import RobotoText from './RobotoText';
 import Card from './Card';
-import Context from '../context/Context';
 import { SvgUri } from 'react-native-svg';
 import { splitNumber } from '../utils/utils';
 import { globalStyles, margin } from '../styles/global';
 import Icon from './Icon';
+import { fetchCovidData } from '../redux/actions';
+import { connect } from 'react-redux';
 
-export default function Sidebar({ navigation }) {
-  const {
-    state: { currentCountryData, loaded },
-    updateData,
-  } = useContext(Context);
+function Sidebar({ navigation, currentCountryData, fetchCovidData }) {
   const [currentPath, setCurrentPath] = useState('CurrentCountryScreen');
 
   const menu = [
@@ -33,6 +30,11 @@ export default function Sidebar({ navigation }) {
   const navigate = ({ stack, screen }) => {
     setCurrentPath(screen);
     navigation.navigate(stack, { screen });
+  };
+
+  const refreshData = () => {
+    fetchCovidData();
+    navigation.closeDrawer();
   };
 
   return (
@@ -91,7 +93,7 @@ export default function Sidebar({ navigation }) {
         ))}
       </View>
 
-      <TouchableOpacity onPress={updateData}>
+      <TouchableOpacity onPress={refreshData}>
         <View style={[globalStyles.btn, globalStyles.bgPrimary]}>
           <Icon
             name="refresh-line"
@@ -112,6 +114,18 @@ export default function Sidebar({ navigation }) {
     </View>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    currentCountryData: state.covidData.currentCountryData,
+  };
+};
+
+const mapDispatchToProps = {
+  fetchCovidData,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
 
 const styles = StyleSheet.create({
   sidebar: {
