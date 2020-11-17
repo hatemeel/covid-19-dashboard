@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Circle, G, TSpan } from 'react-native-svg';
 import { PieChart, ProgressCircle } from 'react-native-svg-charts';
+import { connect } from 'react-redux';
 import { Colors } from '../styles/colors';
 import { globalStyles, margin } from '../styles/global';
 import { capitalize, splitNumber } from '../utils/utils';
@@ -9,7 +10,7 @@ import Card from './Card';
 import Icon from './Icon';
 import RobotoText from './RobotoText';
 
-export default function CountryStatistics({ countryData, dataType }) {
+function CountryStatistics({ countryData, dataType, t }) {
   const sum = (...args) => args.reduce((acc, val) => acc + val, 0);
 
   const getPerc = (value) => {
@@ -73,7 +74,7 @@ export default function CountryStatistics({ countryData, dataType }) {
     <View>
       <Card>
         <RobotoText style={globalStyles.text_3}>
-          {capitalize(dataType)}
+          {t(`statistics.${dataType}`)}
         </RobotoText>
 
         <View style={margin('top', 10)}>
@@ -83,7 +84,7 @@ export default function CountryStatistics({ countryData, dataType }) {
                 name="checkbox-blank-circle-fill"
                 style={[styles.colorIndecator, { color: Colors.danger }]}
               />
-              <RobotoText>Confirmed</RobotoText>
+              <RobotoText>{t(`statistics.confirmed`)}</RobotoText>
             </View>
 
             <View style={styles.td}>
@@ -99,7 +100,7 @@ export default function CountryStatistics({ countryData, dataType }) {
                 name="checkbox-blank-circle-fill"
                 style={[styles.colorIndecator, { color: Colors.success }]}
               />
-              <RobotoText>Recovered</RobotoText>
+              <RobotoText>{t(`statistics.recovered`)}</RobotoText>
             </View>
 
             <View style={styles.td}>
@@ -115,7 +116,7 @@ export default function CountryStatistics({ countryData, dataType }) {
                 name="checkbox-blank-circle-fill"
                 style={[styles.colorIndecator, { color: Colors.dark }]}
               />
-              <RobotoText>Deaths</RobotoText>
+              <RobotoText>{t(`statistics.deaths`)}</RobotoText>
             </View>
 
             <View style={styles.td}>
@@ -162,7 +163,7 @@ export default function CountryStatistics({ countryData, dataType }) {
             </View>
 
             <RobotoText style={[globalStyles.text_1, { textAlign: 'center' }]}>
-              Population / Confirmed
+              {t(`countryHead.population`)} / {t(`statistics.confirmed`)}
             </RobotoText>
           </View>
           <View style={{ flex: 1 }}>
@@ -177,7 +178,7 @@ export default function CountryStatistics({ countryData, dataType }) {
             </View>
 
             <RobotoText style={[globalStyles.text_1, { textAlign: 'center' }]}>
-              Recovered / Deaths
+              {t(`statistics.recovered`)} / {t(`statistics.deaths`)}
             </RobotoText>
           </View>
         </View>
@@ -185,6 +186,12 @@ export default function CountryStatistics({ countryData, dataType }) {
     </View>
   );
 }
+
+const mapStateToProps = (state) => ({
+  t: state.app.translate,
+});
+
+export default connect(mapStateToProps)(CountryStatistics);
 
 const styles = StyleSheet.create({
   tr: {

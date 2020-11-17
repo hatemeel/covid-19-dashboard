@@ -1,17 +1,13 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { SvgUri } from 'react-native-svg';
+import { connect } from 'react-redux';
 import Card from '../components/Card';
 import RobotoText from '../components/RobotoText';
-import { Colors } from '../styles/colors';
 import { globalStyles, margin } from '../styles/global';
 import { splitNumber } from '../utils/utils';
 
-export default function CountryCard({
-  country,
-  countryIndex,
-  onSelectCountry,
-}) {
+function CountryCard({ country, countryIndex, onSelectCountry, t }) {
   return (
     country && (
       <TouchableOpacity
@@ -32,7 +28,7 @@ export default function CountryCard({
               </RobotoText>
 
               <RobotoText style={globalStyles.text_5}>
-                {country.country}
+                {t(`countries.${country.countryCode}`)}
               </RobotoText>
             </View>
           </View>
@@ -41,6 +37,12 @@ export default function CountryCard({
     )
   );
 }
+
+const mapStateToProps = (state) => ({
+  t: state.app.translate,
+});
+
+export default connect(mapStateToProps)(CountryCard);
 
 const styles = StyleSheet.create({
   countryFlag: {

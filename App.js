@@ -6,7 +6,8 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { rootReducer } from './redux/rootReducer';
 import thunk from 'redux-thunk';
-import { fetchCovidData } from './redux/actions';
+import { fetchCovidData, setTranslator } from './redux/actions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -18,6 +19,10 @@ export default function App() {
   const store = createStore(rootReducer, compose(applyMiddleware(thunk)));
 
   store.dispatch(fetchCovidData());
+
+  AsyncStorage.getItem('lang').then((lang) => {
+    store.dispatch(setTranslator(lang));
+  });
 
   return (
     (fontsLoaded && (

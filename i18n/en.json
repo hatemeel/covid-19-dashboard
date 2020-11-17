@@ -272,7 +272,9 @@
   },
   "app": {
     "loading": "Loading",
-    "globalConfirmed": "Global confirmed"
+    "globalConfirmed": "Global confirmed",
+    "chooseLanguage": "Choose language",
+    "chooseFromList": "Choose from list"
   },
   "countryHead": {
     "country": "Country",
@@ -299,6 +301,7 @@
   },
   "sort": {
     "sortBy": "Sort by",
+    "sortedBy": "Sorted by",
     "desc": "Descending",
     "asc": "Ascending",
     "apply": "Apply"

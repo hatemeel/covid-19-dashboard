@@ -6,24 +6,43 @@ import { SvgUri } from 'react-native-svg';
 import { splitNumber } from '../utils/utils';
 import { globalStyles, margin } from '../styles/global';
 import Icon from './Icon';
-import { fetchCovidData } from '../redux/actions';
+import { fetchCovidData, setTranslator } from '../redux/actions';
 import { connect } from 'react-redux';
+import Picker from './Picker';
 
-function Sidebar({ navigation, currentCountryData, fetchCovidData }) {
+function Sidebar({
+  navigation,
+  currentCountryData,
+  fetchCovidData,
+  t,
+  selectedLang,
+  setTranslator,
+}) {
   const [currentPath, setCurrentPath] = useState('CurrentCountryScreen');
 
   const menu = [
     {
       icon: 'user-location-line',
-      title: 'Current country',
+      title: t('menu.currentCountry'),
       stack: 'CurrentCountryStack',
       screen: 'CurrentCountryScreen',
     },
     {
       icon: 'global-line',
-      title: 'Global',
+      title: t('menu.global'),
       stack: 'GlobalCountriesStack',
       screen: 'GlobalCountriesScreen',
+    },
+  ];
+
+  const languageOptions = [
+    {
+      label: 'English',
+      value: 'en',
+    },
+    {
+      label: 'Українська',
+      value: 'uk',
     },
   ];
 
@@ -52,7 +71,8 @@ function Sidebar({ navigation, currentCountryData, fetchCovidData }) {
 
             <View style={styles.sidebar__countryData}>
               <RobotoText style={{ marginBottom: 6 }}>
-                {currentCountryData.region} / {currentCountryData.country}
+                {t(`regions.${currentCountryData.region}`)} /{' '}
+                {t(`countries.${currentCountryData.countryCode}`)}
               </RobotoText>
               <RobotoText>
                 {splitNumber(currentCountryData.confirmed?.total)}
@@ -93,6 +113,12 @@ function Sidebar({ navigation, currentCountryData, fetchCovidData }) {
         ))}
       </View>
 
+      <Picker
+        value={selectedLang}
+        onSelect={setTranslator}
+        options={languageOptions}
+      />
+
       <TouchableOpacity onPress={refreshData}>
         <View style={[globalStyles.btn, globalStyles.bgPrimary]}>
           <Icon
@@ -107,7 +133,7 @@ function Sidebar({ navigation, currentCountryData, fetchCovidData }) {
               margin('left', 15),
             ]}
           >
-            Refresh data
+            {t('menu.refreshData')}
           </RobotoText>
         </View>
       </TouchableOpacity>
@@ -118,11 +144,14 @@ function Sidebar({ navigation, currentCountryData, fetchCovidData }) {
 const mapStateToProps = (state) => {
   return {
     currentCountryData: state.covidData.currentCountryData,
+    selectedLang: state.app.lang,
+    t: state.app.translate,
   };
 };
 
 const mapDispatchToProps = {
   fetchCovidData,
+  setTranslator,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

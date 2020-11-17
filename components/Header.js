@@ -8,7 +8,7 @@ import { globalStyles } from '../styles/global';
 import Burger from './Burger';
 import { connect } from 'react-redux';
 
-function Header({ navigation, back, globalData }) {
+function Header({ navigation, back, globalData, t }) {
   StatusBar.setBarStyle('dark-content');
 
   const openMenu = () => {
@@ -39,7 +39,7 @@ function Header({ navigation, back, globalData }) {
 
       <View style={styles.subheader}>
         <RobotoText style={[globalStyles.textLight]}>
-          Global confirmed: {splitNumber(globalData.totalConfirmed)}
+          {t('app.globalConfirmed')}: {splitNumber(globalData.totalConfirmed)}
         </RobotoText>
       </View>
     </View>
@@ -49,6 +49,7 @@ function Header({ navigation, back, globalData }) {
 const mapStateToProps = (state) => {
   return {
     globalData: state.covidData.globalData,
+    t: state.app.translate,
   };
 };
 

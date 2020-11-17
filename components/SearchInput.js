@@ -7,7 +7,7 @@ import { globalStyles } from '../styles/global';
 import { debounce } from '../utils/utils';
 import Icon from './Icon';
 
-function SearchInput({ setSearchValue }) {
+function SearchInput({ setSearchValue, t }) {
   return (
     <View style={styles.searchInput}>
       <Icon
@@ -17,18 +17,22 @@ function SearchInput({ setSearchValue }) {
 
       <TextInput
         style={styles.searchInput__text}
-        placeholder="Country name, code, region"
+        placeholder={t('searchBar.placeholder')}
         onChangeText={debounce(setSearchValue, 500)}
       />
     </View>
   );
 }
 
+const mapStateToProps = (state) => ({
+  t: state.app.translate,
+});
+
 const mapDispatchToProps = {
   setSearchValue,
 };
 
-export default connect(null, mapDispatchToProps)(SearchInput);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchInput);
 
 const styles = StyleSheet.create({
   searchInput: {

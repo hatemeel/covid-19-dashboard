@@ -1,12 +1,13 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
+import { connect } from 'react-redux';
 import { globalStyles, margin } from '../styles/global';
 import { splitNumber } from '../utils/utils';
 import Card from './Card';
 import RobotoText from './RobotoText';
 
-export default function CountryHead({ countryData, isCurrentCountry }) {
+function CountryHead({ countryData, isCurrentCountry, t }) {
   return (
     <View>
       <Card>
@@ -18,24 +19,30 @@ export default function CountryHead({ countryData, isCurrentCountry }) {
           <View style={styles.country__data}>
             <View style={margin('bottom', 10)}>
               <RobotoText style={globalStyles.text_1}>
-                {isCurrentCountry ? 'Current country' : 'Country'}
+                {isCurrentCountry
+                  ? t('countryHead.currentCountry')
+                  : t('countryHead.country')}
               </RobotoText>
               <RobotoText style={globalStyles.text_3}>
-                {countryData.country}
+                {t(`countries.${countryData.countryCode}`)}
               </RobotoText>
             </View>
 
             <View style={margin('bottom', 10)}>
               <RobotoText style={globalStyles.text_1}>
-                {isCurrentCountry ? 'Current region' : 'Region'}
+                {isCurrentCountry
+                  ? t('countryHead.currentRegion')
+                  : t('countryHead.region')}
               </RobotoText>
               <RobotoText style={globalStyles.text_3}>
-                {countryData.region}
+                {t(`regions.${countryData.region}`)}
               </RobotoText>
             </View>
 
             <View style={margin('bottom', 10)}>
-              <RobotoText style={globalStyles.text_1}>Population</RobotoText>
+              <RobotoText style={globalStyles.text_1}>
+                {t('countryHead.population')}
+              </RobotoText>
               <RobotoText style={globalStyles.text_3}>
                 {splitNumber(countryData.population)}
               </RobotoText>
@@ -43,7 +50,7 @@ export default function CountryHead({ countryData, isCurrentCountry }) {
 
             <View>
               <RobotoText style={globalStyles.text_1}>
-                Total confirmed
+                {t('countryHead.totalConfirmed')}
               </RobotoText>
               <RobotoText style={globalStyles.text_3}>
                 {splitNumber(countryData.confirmed?.total)}
@@ -55,6 +62,12 @@ export default function CountryHead({ countryData, isCurrentCountry }) {
     </View>
   );
 }
+
+const mapStateToProps = (state) => ({
+  t: state.app.translate,
+});
+
+export default connect(mapStateToProps)(CountryHead);
 
 const styles = StyleSheet.create({
   country__flag: {

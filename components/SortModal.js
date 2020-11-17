@@ -17,7 +17,13 @@ import Radio from './Radio';
 import { connect } from 'react-redux';
 import { applySortSettings, closeSortModal } from '../redux/actions';
 
-function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
+function SortModal({
+  modalOpen,
+  sortSettings,
+  closeModal,
+  applySortSettings,
+  t,
+}) {
   const [sort, setSort] = useState({ ...sortSettings });
   const [processing, setProcessing] = useState(false);
 
@@ -47,7 +53,7 @@ function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
         >
           <View style={styles.modal__title}>
             <RobotoText style={[styles.modal__title, globalStyles.text_5]}>
-              Sort By
+              {t('sort.sortBy')}
             </RobotoText>
 
             <Icon
@@ -60,7 +66,7 @@ function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
           <View style={[margin('top', 30), styles.section]}>
             <View style={margin('bottom', 15)}>
               <Radio
-                title="Confirmed"
+                title={t('statistics.confirmed')}
                 checked={sort.type === 'confirmed'}
                 onCheck={() => changeSort('type', 'confirmed')}
               />
@@ -68,7 +74,7 @@ function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
 
             <View style={margin('bottom', 15)}>
               <Radio
-                title="Recovered"
+                title={t('statistics.recovered')}
                 checked={sort.type === 'recovered'}
                 onCheck={() => changeSort('type', 'recovered')}
               />
@@ -76,7 +82,7 @@ function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
 
             <View style={margin('bottom', 15)}>
               <Radio
-                title="Deaths"
+                title={t('statistics.deaths')}
                 checked={sort.type === 'deaths'}
                 onCheck={() => changeSort('type', 'deaths')}
               />
@@ -86,7 +92,7 @@ function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
           <View style={[margin('top', 15), styles.section]}>
             <View style={margin('bottom', 15)}>
               <Radio
-                title="Total"
+                title={t('statistics.total')}
                 checked={sort.interval === 'total'}
                 onCheck={() => changeSort('interval', 'total')}
               />
@@ -94,7 +100,7 @@ function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
 
             <View style={margin('bottom', 15)}>
               <Radio
-                title="New"
+                title={t('statistics.new')}
                 checked={sort.interval === 'new'}
                 onCheck={() => changeSort('interval', 'new')}
               />
@@ -110,7 +116,7 @@ function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
           >
             <View style={margin('bottom', 15)}>
               <Radio
-                title="Descending"
+                title={t('sort.desc')}
                 checked={sort.desc === true}
                 onCheck={() => changeSort('desc', true)}
               />
@@ -118,7 +124,7 @@ function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
 
             <View style={margin('bottom', 30)}>
               <Radio
-                title="Ascending"
+                title={t('sort.asc')}
                 checked={sort.desc === false}
                 onCheck={() => changeSort('desc', false)}
               />
@@ -132,7 +138,9 @@ function SortModal({ modalOpen, sortSettings, closeModal, applySortSettings }) {
             onPressOut={apply}
           >
             {!processing ? (
-              <RobotoText style={globalStyles.text_4}>Apply</RobotoText>
+              <RobotoText style={globalStyles.text_4}>
+                {t('sort.apply')}
+              </RobotoText>
             ) : (
               <ActivityIndicator color={Colors.dark} />
             )}
@@ -147,6 +155,7 @@ const mapStateToProps = (state) => {
   return {
     modalOpen: state.app.sortModalOpen,
     sortSettings: state.covidData.sortSettings,
+    t: state.app.translate,
   };
 };
 

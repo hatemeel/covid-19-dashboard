@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   APPLY_SORT_SETTINGS,
   CLOSE_SORT_MODAL,
@@ -7,8 +8,11 @@ import {
   OPEN_SORT_MODAL,
   SELECT_COUNTRY,
   SET_SEARCH_VALUE,
+  SET_TRANSLATOR,
   SHOW_LOADER,
 } from './types';
+import en from '../i18n/en.json';
+import uk from '../i18n/uk.json';
 
 // ---App---
 export function showLoader() {
@@ -32,6 +36,15 @@ export function openSortModal() {
 export function closeSortModal() {
   return {
     type: CLOSE_SORT_MODAL,
+  };
+}
+
+export function setTranslator(lang) {
+  lang = lang || 'en';
+  AsyncStorage.setItem('lang', lang);
+  return {
+    type: SET_TRANSLATOR,
+    payload: lang,
   };
 }
 
@@ -135,9 +148,9 @@ function mergeData({ covidData: { Countries }, countriesData }) {
       );
 
       return {
-        country: countryCovidData.Country,
+        country: en.countries[countryCovidData.CountryCode],
         countryCode: countryCovidData.CountryCode,
-        region: countryData.region,
+        region: en.regions[countryData.region],
         population: countryData.population,
         flagUrl: `https://purecatamphetamine.github.io/country-flag-icons/1x1/${countryCovidData.CountryCode}.svg`,
         confirmed: {
@@ -152,6 +165,8 @@ function mergeData({ covidData: { Countries }, countriesData }) {
           new: countryCovidData.NewDeaths,
           total: countryCovidData.TotalDeaths,
         },
+        countryTranslations: [uk.countries[countryCovidData.CountryCode]],
+        regionTranslations: [uk.regions[countryData.region]],
       };
     });
   } catch (error) {

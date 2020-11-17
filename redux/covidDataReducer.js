@@ -6,6 +6,14 @@ import {
   SET_SEARCH_VALUE,
 } from './types';
 
+import en from '../i18n/en.json';
+import uk from '../i18n/uk.json';
+
+const locales = {
+  en,
+  uk,
+};
+
 const initialState = {
   dataLoaded: false,
   globalData: null,
@@ -37,14 +45,28 @@ export const covidDataReducer = (state = initialState, action) => {
         ...state,
         formatedCountries: state.countries
           .filter(
-            ({ country, countryCode, region }) =>
+            ({
+              country,
+              countryCode,
+              region,
+              countryTranslations,
+              regionTranslations,
+            }) =>
               country
                 .toLowerCase()
                 .startsWith(state.searchValue.toLowerCase()) ||
               countryCode
                 .toLowerCase()
                 .startsWith(state.searchValue.toLowerCase()) ||
-              region.toLowerCase().startsWith(state.searchValue.toLowerCase())
+              region
+                .toLowerCase()
+                .startsWith(state.searchValue.toLowerCase()) ||
+              countryTranslations.find((cname) =>
+                cname.toLowerCase().startsWith(state.searchValue.toLowerCase())
+              ) ||
+              regionTranslations.find((rname) =>
+                rname.toLowerCase().startsWith(state.searchValue.toLowerCase())
+              )
           )
           .sort((a, b) => {
             switch (state.sortSettings.desc) {

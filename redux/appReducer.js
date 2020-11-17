@@ -10,6 +10,7 @@ import {
 const initialState = {
   loading: false,
   sortModalOpen: false,
+  lang: 'en',
   translate: translate(),
 };
 
@@ -28,7 +29,11 @@ export const appReducer = (state = initialState, action) => {
       return { ...state, sortModalOpen: false };
 
     case SET_TRANSLATOR:
-      return { ...state, translate: translate(action.payload) };
+      return {
+        ...state,
+        translate: translate(action.payload),
+        lang: action.payload,
+      };
 
     default:
       return state;

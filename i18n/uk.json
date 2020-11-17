@@ -272,7 +272,9 @@
   },
   "app": {
     "loading": "Завантаження",
-    "globalConfirmed": "Глобально підтверджено"
+    "globalConfirmed": "Глобально підтверджено",
+    "chooseLanguage": "Вибрати мову",
+    "chooseFromList": "Виберіть зі списку"
   },
   "countryHead": {
     "country": "Країна",
@@ -299,6 +301,7 @@
   },
   "sort": {
     "sortBy": "Сортувати за",
+    "sortedBy": "Відсортовано за",
     "desc": "За спаданням",
     "asc": "За зростанням",
     "apply": "Застосувати"
