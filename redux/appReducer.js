@@ -1,13 +1,16 @@
+import { translate } from '../i18n';
 import {
   CLOSE_SORT_MODAL,
   HIDE_LOADER,
   OPEN_SORT_MODAL,
+  SET_TRANSLATOR,
   SHOW_LOADER,
 } from './types';
 
 const initialState = {
   loading: false,
   sortModalOpen: false,
+  translate: translate(),
 };
 
 export const appReducer = (state = initialState, action) => {
@@ -23,6 +26,9 @@ export const appReducer = (state = initialState, action) => {
 
     case CLOSE_SORT_MODAL:
       return { ...state, sortModalOpen: false };
+
+    case SET_TRANSLATOR:
+      return { ...state, translate: translate(action.payload) };
 
     default:
       return state;

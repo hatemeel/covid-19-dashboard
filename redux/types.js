@@ -9,3 +9,5 @@ export const HIDE_LOADER = 'HIDE_LOADER';
 
 export const OPEN_SORT_MODAL = 'OPEN_SORT_MODAL';
 export const CLOSE_SORT_MODAL = 'CLOSE_SORT_MODAL';
+
+export const SET_TRANSLATOR = 'SET_TRANSLATOR';
